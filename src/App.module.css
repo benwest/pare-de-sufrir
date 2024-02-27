@@ -1,0 +1,21 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  height: 100vh;
+  padding: 0 0.7rem;
+  .top, .bottom {
+    flex-shrink: 0;
+    height: 7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .middle {
+    flex-grow: 1;
+  }
+  .bottom h2 {
+    cursor: pointer;
+  }
+}

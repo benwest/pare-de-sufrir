@@ -1,0 +1,35 @@
+.poem {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+
+  gap: 0.5em;
+
+  @media (min-width: 920px) {
+    gap: 0;
+    font-size: 1rem;
+    letter-spacing: 0.39em;
+  }
+
+  p {
+    display: none;
+    @media (min-width: 920px) {
+      display: block;
+      opacity: 0;
+    }
+    &.currentLine {
+      display: block;
+      opacity: 1;
+    }
+  }
+
+  br {
+    @media (min-width: 920px) {
+      display: none;
+    }
+  }
+}

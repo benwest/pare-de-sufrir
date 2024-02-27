@@ -1,0 +1,63 @@
+@layer reset, base, tokens, recipes, utilities;
+
+@font-face {
+  font-family: "Bradford";
+  src: url("/BradfordLL Medium.otf");
+}
+
+@font-face {
+  font-family: "Bradford";
+  font-style: italic;
+  src: url("/BradfordLL Medium Italic.otf");
+}
+
+:root {
+  --red: #DD1D28;
+  --black: #191818;
+
+  --aspect-ratio: 2048 / 1556;
+
+  font-family: Bradford, serif;
+  line-height: 1.5;
+
+  color: rgba(255, 255, 255, 0.87);
+  background-color: var(--red);
+  color: var(--black);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  text-transform: uppercase;
+  letter-spacing: 0.39em;
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+@media (min-width: 1200px) {
+  :root {
+    font-size: 20px;
+  }
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+  position: relative;
+}
+
+body {
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+}
+
+em {
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0.07em;
+}
+
