@@ -7,8 +7,6 @@ import {
   MediaPlayer,
   MediaPlayerInstance,
   MediaProvider,
-  MediaProviderInstance,
-  PlayButton,
   TimeSlider,
 } from "@vidstack/react";
 import classnames from "classnames";
@@ -75,14 +73,8 @@ export function Player({ fromContainerRef, close }: PlayerProps) {
     }
   };
 
-  const [transitionDone, setTransitionDone] = useState(true);
-
   return (
-    <div
-      ref={toContainerRef}
-      className={styles.videoContainer}
-      onTransitionEnd={() => setTransitionDone(true)}
-    >
+    <div ref={toContainerRef} className={styles.videoContainer}>
       <MediaPlayer
         ref={playerRef}
         className={styles.mediaPlayer}
