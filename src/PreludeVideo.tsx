@@ -1,6 +1,6 @@
 import classnames from "classnames";
 import styles from "./PreludeVideo.module.css";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 const srcs = [
   "prelude_0.mp4",
@@ -21,22 +21,25 @@ export function PreludeVideo({
   onReady,
   onEnd,
 }: PreludeVideoProps) {
-  const [loaded, setLoaded] = useState(0);
-  const onLoad = useCallback(() => {
-    const numLoaded = loaded + 1;
-    setLoaded(numLoaded);
-    if (numLoaded === srcs.length - 1) onReady();
-  }, [loaded, onReady]);
+  const loaded = useRef({} as Record<string, boolean>).current;
+  const onLoad = useCallback(
+    (src: string) => {
+      loaded[src] = true;
+      if (Object.keys(loaded).length === srcs.length) onReady();
+    },
+    [loaded, onReady]
+  );
 
   return (
     <>
-      {srcs.slice(0, loaded + 1).map((src, i) => (
+      {srcs.map((src, i) => (
         <Clip
           key={i}
           src={src}
           isCurrent={i === currentClip}
           onLoad={onLoad}
           onEnd={onEnd}
+          isReady={Object.keys(loaded).length === srcs.length}
         />
       ))}
     </>
@@ -46,15 +49,18 @@ export function PreludeVideo({
 interface ClipProps {
   src: string;
   isCurrent: boolean;
-  onLoad: () => void;
+  isReady: boolean;
+  onLoad: (src: string) => void;
   onEnd: () => void;
 }
-function Clip({ src, isCurrent, onLoad, onEnd }: ClipProps) {
+function Clip({ src, isCurrent, isReady, onLoad, onEnd }: ClipProps) {
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    ref.current?.load();
-  }, []);
+    const video = ref.current!;
+    video.load();
+    if (video.readyState > 3) onLoad(src);
+  }, [onLoad, src]);
 
   useEffect(() => {
     const video = ref.current!;
@@ -67,9 +73,13 @@ function Clip({ src, isCurrent, onLoad, onEnd }: ClipProps) {
   return (
     <video
       ref={ref}
-      className={classnames(styles.video, isCurrent && styles.current)}
+      className={classnames(
+        styles.video,
+        isCurrent && styles.current,
+        isReady && styles.ready
+      )}
       src={src}
-      onCanPlayThrough={onLoad}
+      onCanPlayThrough={() => onLoad(src)}
       onEnded={e => {
         if (isCurrent) onEnd();
         (e.target as HTMLVideoElement).currentTime = 0;

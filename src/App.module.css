@@ -13,6 +13,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    animation: fade-in 3s;
+    animation-fill-mode: both;
     @media (min-width: 920px) {
       height: 8rem;
     }
@@ -23,5 +25,14 @@
   }
   .bottom h2 {
     cursor: pointer;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

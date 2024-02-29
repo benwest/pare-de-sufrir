@@ -7,6 +7,7 @@ import { About } from "./About";
 function App() {
   const [started, setStarted] = useState(false);
   const preludeVideoContainerRef = useRef<HTMLDivElement>(null);
+
   return (
     <>
       <section className={styles.home}>
