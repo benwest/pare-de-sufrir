@@ -21,9 +21,14 @@
   cursor: none;
 }
 
-.close {
+.button {
   color: var(--red);
   cursor: pointer;
+  font: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
 @keyframes scale-up {

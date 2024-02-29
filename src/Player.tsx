@@ -99,10 +99,12 @@ export function Player({ fromContainerRef, close }: PlayerProps) {
                   <TimeSlider.Value className={styles.timeValue} />
                 </TimeSlider.Preview>
               </TimeSlider.Root>
-              <FullscreenButton>Fullscreen</FullscreenButton>
-              <div className={styles.close} onClick={close}>
+              <FullscreenButton className={styles.button}>
+                <em>Fullscreen</em>
+              </FullscreenButton>
+              <button className={styles.button} onClick={close}>
                 <em>Exit</em>
-              </div>
+              </button>
             </Controls.Group>
           </Controls.Root>
         )}
