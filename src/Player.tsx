@@ -1,6 +1,17 @@
 import { RefObject, useEffect, useRef, useState } from "react";
 import styles from "./Player.module.css";
 import { useRect } from "./hooks/useRect";
+import {
+  Controls,
+  FullscreenButton,
+  MediaPlayer,
+  MediaPlayerInstance,
+  MediaProvider,
+  MediaProviderInstance,
+  PlayButton,
+  TimeSlider,
+} from "@vidstack/react";
+import classnames from "classnames";
 
 interface Size {
   width: number;
@@ -22,7 +33,6 @@ export function Player({ fromContainerRef, close }: PlayerProps) {
   const toContainerRef = useRef<HTMLDivElement>(null);
   const fromContainerRect = useRect(fromContainerRef);
   const toContainerRect = useRect(toContainerRef);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const measured =
     fromContainerRect !== undefined && toContainerRect !== undefined;
 
@@ -44,7 +54,7 @@ export function Player({ fromContainerRef, close }: PlayerProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowControls(true);
-    }, 2000);
+    }, 3000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -55,47 +65,56 @@ export function Player({ fromContainerRef, close }: PlayerProps) {
     };
   }, []);
 
-  const [isIdle, setIsIdle] = useState(true);
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
-    const onMouseMove = () => {
-      setIsIdle(false);
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        setIsIdle(true);
-      }, 2500);
-    };
-    window.addEventListener("mousemove", onMouseMove);
-    return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      clearTimeout(timer);
-    };
-  }, []);
+  const playerRef = useRef<MediaPlayerInstance>(null);
+  const togglePlay = () => {
+    if (!playerRef.current) return;
+    if (playerRef.current.paused) {
+      playerRef.current.play();
+    } else {
+      playerRef.current.pause();
+    }
+  };
+
+  const [transitionDone, setTransitionDone] = useState(true);
 
   return (
-    <div ref={toContainerRef} className={styles.videoContainer}>
-      <video
-        className={styles.video}
-        ref={videoRef}
-        src="PDS Temp for Site.mp4"
-        autoPlay
-        controls={showControls}
+    <div
+      ref={toContainerRef}
+      className={styles.videoContainer}
+      onTransitionEnd={() => setTransitionDone(true)}
+    >
+      <MediaPlayer
+        ref={playerRef}
+        className={styles.mediaPlayer}
         style={{ "--from-scale": fromScale, opacity: measured ? 1 : 0 }}
-      />
-      <div
-        className={styles.close}
-        onClick={close}
-        style={{ opacity: showControls && !isIdle ? 1 : 0 }}
+        src="PDS Temp for Site.mp4"
+        autoplay
+        onFullscreenChange={isFullscreen => {
+          if (!isFullscreen) close();
+        }}
       >
-        Exit
-      </div>
+        <MediaProvider className={styles.mediaProvider} onClick={togglePlay} />
+        {showControls && (
+          <Controls.Root className={styles.controls}>
+            <Controls.Group className={styles.controlsGroup}>
+              <TimeSlider.Root className={styles.slider}>
+                <TimeSlider.Track className={styles.track}>
+                  <TimeSlider.TrackFill
+                    className={classnames(styles.track, styles.trackFill)}
+                  />
+                </TimeSlider.Track>
+                <TimeSlider.Preview className={styles.preview}>
+                  <TimeSlider.Value className={styles.timeValue} />
+                </TimeSlider.Preview>
+              </TimeSlider.Root>
+              <FullscreenButton>Fullscreen</FullscreenButton>
+              <div className={styles.close} onClick={close}>
+                <em>Exit</em>
+              </div>
+            </Controls.Group>
+          </Controls.Root>
+        )}
+      </MediaPlayer>
     </div>
-    // <div
-    //   className={styles.player}
-    //   style={{ "--from-scale": fromScale, opacity: measured ? 1 : 0 }}
-    // >
-    //   <div ref={toContainerRef} className={styles.videoContainer}>
-    //   </div>
-    // </div>
   );
 }

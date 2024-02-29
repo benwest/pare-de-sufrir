@@ -4,16 +4,22 @@
   align-items: stretch;
   justify-content: center;
   height: 100vh;
+  height: 100dvh;
   padding: 0 0.7rem;
-  .top, .bottom {
+  .top,
+  .bottom {
     flex-shrink: 0;
-    height: 7rem;
+    height: 12rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    @media (min-width: 920px) {
+      height: 8rem;
+    }
   }
   .middle {
     flex-grow: 1;
+    position: relative;
   }
   .bottom h2 {
     cursor: pointer;

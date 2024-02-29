@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import styles from "./About.module.css";
 
 function Credits() {
@@ -37,7 +38,35 @@ export function About() {
           et sagittis.
         </em>
       </div>
-      <img className={styles.painting} src="PDS Painting ADJ WB.jpg" />
+      <Painting />
     </section>
+  );
+}
+
+function remap(
+  value: number,
+  fromLow: number,
+  fromHigh: number,
+  toLow: number,
+  toHigh: number
+) {
+  return toLow + ((value - fromLow) / (fromHigh - fromLow)) * (toHigh - toLow);
+}
+
+function Painting() {
+  const ref = useRef<HTMLImageElement>(null);
+  useEffect(() => {
+    const img = ref.current!;
+    let frame: number;
+    const tick = () => {
+      const brightness = remap(Math.sin(Date.now() / 1000), -1, 1, 1, 1.4);
+      img.style.filter = `brightness(${brightness})`;
+      frame = requestAnimationFrame(tick);
+    };
+    tick();
+    return () => cancelAnimationFrame(frame);
+  }, []);
+  return (
+    <img ref={ref} className={styles.painting} src="PDS Painting ADJ WB.png" />
   );
 }
