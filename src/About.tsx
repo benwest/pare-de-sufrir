@@ -60,7 +60,7 @@ function Painting() {
     let frame: number;
     const tick = () => {
       const brightness = remap(Math.sin(Date.now() / 1000), -1, 1, 1, 1.4);
-      img.style.filter = `brightness(${brightness})`;
+      // img.style.filter = `brightness(${brightness})`;
       frame = requestAnimationFrame(tick);
     };
     tick();

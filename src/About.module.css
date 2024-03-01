@@ -10,6 +10,7 @@
   text-align: center;
   animation: fade-in 3s;
   animation-fill-mode: both;
+  background-color: var(--red);
 
   .title {
     flex-shrink: 0;
