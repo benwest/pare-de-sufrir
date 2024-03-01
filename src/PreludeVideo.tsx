@@ -67,9 +67,16 @@ function Clip({ src, isCurrent, isReady, onLoad, onEnd }: ClipProps) {
 
   useLayoutEffect(() => {
     const video = ref.current!;
-    video.currentTime = 0;
     if (isCurrent) {
       video.play();
+    }
+  }, [isCurrent]);
+
+  useEffect(() => {
+    const video = ref.current!;
+    if (!isCurrent) {
+      video.pause();
+      video.currentTime = 0;
     }
   }, [isCurrent]);
 
@@ -83,9 +90,8 @@ function Clip({ src, isCurrent, isReady, onLoad, onEnd }: ClipProps) {
       )}
       src={src}
       onCanPlayThrough={() => onLoad(src)}
-      onEnded={e => {
+      onEnded={() => {
         if (isCurrent) onEnd();
-        (e.target as HTMLVideoElement).currentTime = 0;
       }}
       playsInline
       muted
