@@ -1,6 +1,6 @@
 import classnames from "classnames";
 import styles from "./PreludeVideo.module.css";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 
 const srcs = [
   "prelude_0.mp4",
@@ -56,13 +56,16 @@ interface ClipProps {
 function Clip({ src, isCurrent, isReady, onLoad, onEnd }: ClipProps) {
   const ref = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const video = ref.current!;
-    video.load();
-    if (video.readyState > 3) onLoad(src);
+    if (video.readyState > 3) {
+      onLoad(src);
+    } else {
+      video.load();
+    }
   }, [onLoad, src]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const video = ref.current!;
     video.currentTime = 0;
     if (isCurrent) {
