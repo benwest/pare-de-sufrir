@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import styles from "./App.module.css";
 import { Prelude } from "./Prelude";
 import { Player } from "./Player";
@@ -19,7 +19,9 @@ function App() {
           className={styles.middle}
           onClick={() => setStarted(true)}
         >
-          <Prelude />
+          <Suspense fallback={null}>
+            <Prelude />
+          </Suspense>
         </div>
         <div className={styles.bottom} onClick={() => setStarted(true)}>
           <h2>

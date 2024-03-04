@@ -7,7 +7,9 @@ import {
   MediaPlayer,
   MediaPlayerInstance,
   MediaProvider,
+  MediaProviderAdapter,
   TimeSlider,
+  isHLSProvider,
 } from "@vidstack/react";
 import classnames from "classnames";
 
@@ -84,6 +86,7 @@ export function Player({ fromContainerRef, close }: PlayerProps) {
         onFullscreenChange={isFullscreen => {
           if (!isFullscreen) close();
         }}
+        onProviderChange={onProviderChange}
       >
         <MediaProvider className={styles.mediaProvider} onClick={togglePlay} />
         {showControls && (
@@ -111,4 +114,10 @@ export function Player({ fromContainerRef, close }: PlayerProps) {
       </MediaPlayer>
     </div>
   );
+}
+
+function onProviderChange(provider: MediaProviderAdapter | null) {
+  if (isHLSProvider(provider)) {
+    provider.library = () => import("hls.js");
+  }
 }
