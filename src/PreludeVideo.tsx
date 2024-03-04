@@ -1,6 +1,12 @@
 import classnames from "classnames";
 import styles from "./PreludeVideo.module.css";
-import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 const srcs = [
   "prelude_0.mp4",
@@ -55,6 +61,7 @@ interface ClipProps {
 }
 function Clip({ src, isCurrent, isReady, onLoad, onEnd }: ClipProps) {
   const ref = useRef<HTMLVideoElement>(null);
+  const [playFailed, setPlayFailed] = useState(false);
 
   useLayoutEffect(() => {
     const video = ref.current!;
@@ -68,7 +75,7 @@ function Clip({ src, isCurrent, isReady, onLoad, onEnd }: ClipProps) {
   useLayoutEffect(() => {
     const video = ref.current!;
     if (isCurrent) {
-      video.play();
+      video.play().catch(() => setPlayFailed(true));
     }
   }, [isCurrent]);
 
@@ -79,6 +86,13 @@ function Clip({ src, isCurrent, isReady, onLoad, onEnd }: ClipProps) {
       video.currentTime = 0;
     }
   }, [isCurrent]);
+
+  useEffect(() => {
+    if (playFailed && isCurrent) {
+      const timer = setTimeout(onEnd, ref.current!.duration * 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isCurrent, onEnd, playFailed]);
 
   return (
     <video

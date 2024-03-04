@@ -21,7 +21,7 @@ function App() {
         >
           <Prelude />
         </div>
-        <div className={styles.bottom}>
+        <div className={styles.bottom} onClick={() => setStarted(true)}>
           <h2>
             Begin <em>(48:19)</em>
           </h2>

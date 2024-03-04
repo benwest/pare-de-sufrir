@@ -32,7 +32,7 @@ export function Prelude() {
       <PreludeVideo
         currentClip={currentClip}
         onReady={() => setReady(true)}
-        onEnd={() => setStep(step + 1)}
+        onEnd={next}
       />
     </>
   );
