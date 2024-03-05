@@ -75,18 +75,27 @@ export function Player({ fromContainerRef, close }: PlayerProps) {
     }
   };
 
+  const [metadataLoaded, setMetadataLoaded] = useState(false);
+
   return (
-    <div ref={toContainerRef} className={styles.videoContainer}>
+    <div
+      ref={toContainerRef}
+      className={classnames(
+        styles.videoContainer,
+        metadataLoaded && styles.animate
+      )}
+    >
       <MediaPlayer
         ref={playerRef}
         className={styles.mediaPlayer}
         style={{ "--from-scale": fromScale, opacity: measured ? 1 : 0 }}
-        src="PDS Temp for Site.mp4"
+        src="https://player.vimeo.com/external/913503349.m3u8?s=891db6a6e6a3879373ae24ed539e478fdf64ea17&logging=false"
         autoplay
         onFullscreenChange={isFullscreen => {
           if (!isFullscreen) close();
         }}
         onProviderChange={onProviderChange}
+        onLoadedMetadata={() => setMetadataLoaded(true)}
       >
         <MediaProvider className={styles.mediaProvider} onClick={togglePlay} />
         {showControls && (

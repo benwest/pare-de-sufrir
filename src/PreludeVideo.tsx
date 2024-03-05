@@ -31,7 +31,6 @@ export function PreludeVideo({
   const loaded = useRef({} as Record<string, boolean>).current;
   const onLoad = useCallback(
     (src: string) => {
-      console.log("loaded", src);
       loaded[src] = true;
       if (Object.keys(loaded).length === srcs.length) onReady();
     },
