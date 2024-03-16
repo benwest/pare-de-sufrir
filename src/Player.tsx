@@ -89,7 +89,7 @@ export function Player({ fromContainerRef, close }: PlayerProps) {
         ref={playerRef}
         className={styles.mediaPlayer}
         style={{ "--from-scale": fromScale, opacity: measured ? 1 : 0 }}
-        src="https://player.vimeo.com/external/913503349.m3u8?s=891db6a6e6a3879373ae24ed539e478fdf64ea17&logging=false"
+        src="https://player.vimeo.com/external/923559760.m3u8?s=fd02e1d140d68c1c00077ae6b3331fbb10369b1a&logging=false"
         autoplay
         onFullscreenChange={isFullscreen => {
           if (!isFullscreen) close();
